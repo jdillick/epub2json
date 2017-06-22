@@ -5,11 +5,13 @@ Convert a directory of epub files to JSON format.
 ## Installation
 
 ```
-npm install -g epub2json
+$ npm install -g epub2json
 ```
 
 ## Usage
 
+Convert .epub files from src path to .json file in output path.
+
 ```
-$ epub2json -i </path/to/epubs> -o </path/to/output>
+$ epub2json convert -i </path/to/epubs> -o </path/to/output>
 ```
