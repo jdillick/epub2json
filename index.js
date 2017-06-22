@@ -4,6 +4,7 @@ const commander = require('commander');
 const chalk = require('chalk');
 const prompt = require('prompt');
 const log = console.log.bind(console);
+const error = console.error.bind(console);
 const ora = require('ora');
 const globby = require('globby');
 const fs = require('fs');
@@ -106,7 +107,7 @@ const writeJSON = (book, outputPath) => {
   fs.writeFile(outputFile, JSON.stringify(book), err => {
     log(`Output ${outputFile}`);
     if (err) {
-      log(chalk.red(`Unable to write to file ${outputFile}`));
+      error(chalk.red(`Unable to write to file ${outputFile}`));
     }
   });
 };
@@ -120,24 +121,24 @@ const convertAction = (cmd) => {
   const outputPath = cmd.outputPath || '';
 
   if ( ! inputPath ) {
-    log(chalk.red('Missing input path'));
+    error(chalk.red('Missing input path'));
     help();
-    process.exit();
+    process.exit(1);
   }
 
   if ( ! outputPath ) {
-    log(chalk.red('Missing output path'));
+    error(chalk.red('Missing output path'));
     help();
-    process.exit();
+    process.exit(1);
   }
 
   if ( ! validInput(inputPath) ) {
-    log(chalk.red(`No such input path or can not read from '${inputPath}'`));
-    process.exit();
+    error(chalk.red(`No such input path or can not read from '${inputPath}'`));
+    process.exit(1);
   }
   if ( ! validOutput(outputPath ) ) {
-    log(chalk.red(`No such output path or can not write to '${outputPath}'`));
-    process.exit();
+    error(chalk.red(`No such output path or can not write to '${outputPath}'`));
+    process.exit(1);
   }
 
   let bookPromises = [];
@@ -163,7 +164,7 @@ const convertAction = (cmd) => {
 };
 
 commander
-  .version('0.0.4');
+  .version('0.0.5');
 
 commander
   .command('convert')
