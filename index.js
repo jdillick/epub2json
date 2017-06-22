@@ -12,7 +12,7 @@ const EPub = require('epub');
 
 const help = () => {
   log(chalk.green('  Examples:'));
-  log(chalk.yellow('    $ epub2json -i </path/to/epubs> -o </path/to/output>\n'));
+  log(chalk.yellow('    $ epub2json convert -i </path/to/epubs> -o </path/to/output>\n'));
 };
 
 /**
@@ -163,7 +163,7 @@ const convertAction = (cmd) => {
 };
 
 commander
-  .version('0.0.3');
+  .version('0.0.4');
 
 commander
   .command('convert')
