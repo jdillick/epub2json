@@ -164,7 +164,7 @@ const convertAction = (cmd) => {
 };
 
 commander
-  .version('0.0.5');
+  .version('0.0.6');
 
 commander
   .command('convert')
