@@ -116,7 +116,7 @@ const writeJSON = (book, outputPath) => {
  * Convert path of epubs to txt files.
  * @param  {object} commander object
  */
-const convertAction = (cmd) => {
+const convertAction = cmd => {
   const inputPath = cmd.inputPath || '';
   const outputPath = cmd.outputPath || '';
 
@@ -141,30 +141,40 @@ const convertAction = (cmd) => {
     process.exit(1);
   }
 
-  let bookPromises = [];
   let spinner = ora('Loading documents.').start();
 
-  globby(`${inputPath}/*.epub`).then(paths => {
+  function bookPromises(paths) {
+    let promises = [];
+
     paths.forEach(path => {
       let bookPromise = parseEpub(path);
-      bookPromises.push(bookPromise);
+      promises.push(bookPromise);
       bookPromise.then(book => {
         writeJSON(book, outputPath);
       }).catch(err => {
         log(err);
       });
     });
-  });
 
-  Promise.all(bookPromises).then(() => {
+    return Promise.all(promises);
+  };
+
+  globby(`${inputPath}/*.epub`).then(async (paths) => {
+    const chunkSize = 10;
+    const chunks = Math.ceil(paths.length / chunkSize);
+    for (let chunk = 0; chunk < chunks; chunk++ ) {
+      let allBooks = [];
+      let index = chunk * chunkSize;
+      let books = await bookPromises(paths.slice(index, index + chunkSize));
+      spinner.text = `chunk ${chunk}`;
+    }
+
     spinner.stop();
-  }).catch(err => {
-    log(err);
   });
 };
 
 commander
-  .version('0.0.6');
+  .version('0.0.7');
 
 commander
   .command('convert')
