@@ -2,7 +2,6 @@
 
 const commander = require('commander');
 const chalk = require('chalk');
-const prompt = require('prompt');
 const log = console.log.bind(console);
 const error = console.error.bind(console);
 const ora = require('ora');
@@ -174,7 +173,7 @@ const convertAction = cmd => {
 };
 
 commander
-  .version('0.0.7');
+  .version('0.0.8');
 
 commander
   .command('convert')
