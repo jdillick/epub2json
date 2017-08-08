@@ -32,7 +32,8 @@ const parseEpub = ePubPath => {
       subject: '',
       date: '',
       description: '',
-      text: '',
+      chapterIds: [],
+      chapters: {}
     };
 
     epub.on('end', () => {
@@ -49,17 +50,21 @@ const parseEpub = ePubPath => {
             if (error) {
               reject(error);
             } else {
-              resolve(text);
+              resolve({
+                id: chapter.id,
+                text,
+              });
             }
           });
         }));
       });
 
-      Promise.all(textPromises).then((...values) => {
-        values.forEach(chapterText => {
-          book.text += chapterText;
-        });
-        resolve(book);
+      Promise.all(textPromises).then(chapters => {
+        resolve(chapters.reduce((book, chapter) => {
+          book.chapterIds.push(chapter.id);
+          book.chapters[chapter.id] = chapter.text;
+          return book;
+        }, book));
       }).catch(err => {
         reject(err);
       });
