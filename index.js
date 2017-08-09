@@ -9,6 +9,7 @@ const globby = require('globby');
 const fs = require('fs');
 const path = require('path');
 const EPub = require('epub');
+const pkg = require('./package.json');
 
 const help = () => {
   log(chalk.green('  Examples:'));
@@ -178,7 +179,7 @@ const convertAction = cmd => {
 };
 
 commander
-  .version('0.0.8');
+  .version(pkg.version);
 
 commander
   .command('convert')
